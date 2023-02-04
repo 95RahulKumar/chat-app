@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+        integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://kit.fontawesome.com/fd68fe064c.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="room">
+        <div class="room__container">
+            <div class="room__left">
+                <div class="btn__wraper">
+                    <i class="fa fa-solid fa-message"></i>
+                </div>
+            </div>
+            <div class="room__chatarea">
+                <div class="room__header">
+                    <div class="header__left">
+                        <div class="search">
+                            <i class="fa fa-thin fa-magnifying-glass"></i>
+                            <input type="text" placeholder="Search">
+                        </div>
+                    </div>
+                    <div class="header__right">
+                        <div class="user-icon">
+                            <i class="fa fa-solid fa-user"></i>
+                        </div>
+                        <div class="user__wpr">
+                            <div class="user-des">
+                                <h4>User Name</h4>
+                            </div>
+                            <i class="fa fa-thin fa-bars-staggered"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="room__chatting">
+                    <div class="room__middle">
+                        <div class="user">
+                            <div class="user-icon">
+                                <i class="fa fa-solid fa-user"></i>
+                            </div>
+                            <div class="user-des">
+                                <h4>Rahul</h4>
+                                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="room__wpr">
+                        <div class="room__right">
+                            <!-- <div class="talk">
+                                <div class="talk-icon">
+                                    <i class="fa fa-solid fa-user"></i>
+                                </div>
+                                <div class="talk-des">
+                                    <h4>Rahul</h4>
+                                    <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
+                                </div>
+                                <small class="room__time">date</small>
+                            </div> -->
+
+                        </div>
+                        <form id="form" action="">
+                            <input id="input" placeholder="message..." autocomplete="off" /><button>
+                                <i class="fa fa-thin fa-paper-plane"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.11.0/qs.min.js"
+        integrity="sha512-/l6vieC+YxaZywUhmqs++8uF9DeMvJE61ua5g+UK0TuHZ4TkTgB1Gm1n0NiA86uEOM9JJ6JUwyR0hboKO0fCng=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io();
+
+        var form = document.getElementById('form');
+        var input = document.getElementById('input');
+        const user = window.location.href.split('?')[1].split('&')[0].split('=')[1];
+        socket.emit('user', user);
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            if (input.value) {
+                socket.emit('message', input.value);
+                input.value = '';
+                console.log('user', user)
+            }
+        });
+        socket.on('message', function (msg) {
+            const right = document.querySelector('.room__right')
+            var div = document.createElement('div');
+            div.classList.add('talk')
+            div.innerHTML = `<div class="talk-icon">
+                                <i class="fa fa-solid fa-user"></i>
+                            </div>
+                            <div class="talk-des">
+                                <h4>${msg.username}</h4>
+                                <p>${msg.message}</p>
+                                <small class="room__time">${msg.time}</small>
+                            </div>
+            `;
+            right.appendChild(div);
+            // const position = div.offsetHeight
+            // window.scrollTo(0, position);
+            right.scrollTop = right.scrollHeight
+
+        });
+    </Script>
+</body>
+
+</html>
