@@ -7,7 +7,7 @@ const io = new Server(server);
 const path = require('path')
 const formateMessage = require('./utils/message');
 app.use('/', express.static(path.join(__dirname, 'public')))
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 3001
 let username
 io.on('connection', (socket) => {
   //on entering message by user
@@ -35,5 +35,5 @@ io.on('connection', (socket) => {
 });
 
 server.listen(PORT, () => {
-  console.log('listening on--->:3000');
+  console.log('listening on--->:3001');
 });
